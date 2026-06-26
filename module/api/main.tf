@@ -6,7 +6,18 @@ resource "aws_api_gateway_rest_api" "api" {
       version = "1.0"
     }
     paths = {
-      "/path1" = {
+      "/register" = {
+        get = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "POST"
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+          }
+        }
+      }
+
+      "/login" = {
         get = {
           x-amazon-apigateway-integration = {
             httpMethod           = "GET"
@@ -19,7 +30,7 @@ resource "aws_api_gateway_rest_api" "api" {
     }
   })
 
-  name = "example"
+  name = "m4ace-test"
 
   endpoint_configuration {
     types = ["REGIONAL"]
