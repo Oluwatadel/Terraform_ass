@@ -1,4 +1,5 @@
 resource "aws_api_gateway_rest_api" "api" {
+  name = "m4ace-test"
   body = jsonencode({
     openapi = "3.0.1"
     info = {
@@ -6,13 +7,13 @@ resource "aws_api_gateway_rest_api" "api" {
       version = "1.0"
     }
     paths = {
-      "/register" = {
+      "/signup" = {
         get = {
           x-amazon-apigateway-integration = {
             httpMethod           = "POST"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+            uri                  = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-3-31/functions/${var.signup_function_arn}/invocations"
           }
         }
       }
@@ -23,14 +24,13 @@ resource "aws_api_gateway_rest_api" "api" {
             httpMethod           = "GET"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+            uri                  = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-3-31/functions/${login_function_arn}/invocations"
           }
         }
       }
     }
   })
 
-  name = "m4ace-test"
 
   endpoint_configuration {
     types = ["REGIONAL"]
